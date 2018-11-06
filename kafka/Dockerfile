@@ -1,0 +1,43 @@
+FROM dayin/jdk:8u191
+
+ENV BROKER_ID=0 \
+	DELETE_TOPIC_ENABLE=false \
+	LISTENERS=PLAINTEXT://127.0.0.1:9092 \
+	NUM_NETWORK_THREADS=3 \
+	NUM_IO_THREADS=8 \
+	SOCKET_SEND_BUFFER_BYTES=102400 \
+	SOCKET_RECEIVE_BUFFER_BYTES=102400 \
+	SOCKET_REQUEST_MAX_BYTES=104857600 \
+	LOG_DIRS=/kafka-logs \
+	CONF_DIR=/kafka-conf \
+	NUM_PARTITIONS=1 \
+	NUM_RECOVERY_THREADS_PER_DATA_DIR=1 \
+	LOG_FLUSH_INTERVAL_MESSAGES=10000 \
+	LOG_FLUSH_INTERVAL_MS=1000 \
+	LOG_RETENTION_HOURS=168 \ 
+	LOG_RETENTION_BYTES=1073741824 \
+	LOG_SEGMENT_BYTES=1073741824 \
+	LOG_RETENTION_CHECK_INTERVAL_MS=300000 \
+	ZOOKEEPER_CONNECT=localhost:2181 \
+	ZOOKEEPER_CONNECTION_TIMEOUT_MS=6000 
+
+ARG KAFKA_VERSION=0.10.2.2
+
+RUN curl -L -o kafka.tgz -k "http://mirrors.hust.edu.cn/apache/kafka/$KAFKA_VERSION/kafka_2.11-$KAFKA_VERSION.tgz" && \
+	tar -C /opt/prog -zxvf kafka.tgz && \
+	mv /opt/prog/kafka_2.11-$KAFKA_VERSION /opt/prog/kafka && \
+	rm kafka.tgz
+
+ENV KAFKA_HOME=/opt/prog/kafka
+ENV PATH=$KAFKA_HOME/bin:$PATH
+
+WORKDIR /opt/prog/kafka
+VOLUME ["$LOG_DIRS", "$CONF_DIR"]
+
+EXPOSE 9092
+COPY docker-entrypoint.sh $KAFKA_HOME/bin
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["kafka-server-start.sh", "$CONF_DIR/server.properties"]
+
+
+	
