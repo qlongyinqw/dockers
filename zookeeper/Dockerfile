@@ -25,10 +25,10 @@ WORKDIR /opt/prog/zookeeper
 VOLUME ["$ZOO_DATA_DIR", "$ZOO_DATA_LOG_DIR", "$ZOO_LOG_DIR"]
 
 EXPOSE $ZOO_PORT 2888 3888
-ENV ZOOKEEPER_HOME=/opt/prog/zookeeper \
-    PATH=$ZOOKEEPER_HOME/bin:$PATH
+ENV ZOOKEEPER_HOME=/opt/prog/zookeeper
+ENV PATH=$ZOOKEEPER_HOME/bin:$PATH
 
 COPY docker-entrypoint.sh $ZOOKEEPER_HOME/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["zkServer.sh", "start-foreground"]
+CMD zkServer.sh start-foreground $ZOO_CONF_DIR/zoo.cfg
 

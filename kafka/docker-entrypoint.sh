@@ -15,7 +15,7 @@ if [[ ! -f "$CONF_DIR/server.properties" ]]; then
     echo "socket.request.max.bytes=$SOCKET_REQUEST_MAX_BYTES" >> "$CONFIG"
 
     echo "log.dirs=$LOG_DIRS" >> "$CONFIG"
-    echo "num.partitions=$LOG_DIRS" >> "$CONFIG"
+    echo "num.partitions=$NUM_PARTITIONS" >> "$CONFIG"
     echo "num.recovery.threads.per.data.dir=$NUM_RECOVERY_THREADS_PER_DATA_DIR" >> "$CONFIG"
     
     echo "log.flush.interval.messages=$LOG_FLUSH_INTERVAL_MESSAGES" >> "$CONFIG"

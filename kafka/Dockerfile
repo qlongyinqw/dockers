@@ -2,7 +2,7 @@ FROM dayin/jdk:8u191
 
 ENV BROKER_ID=0 \
 	DELETE_TOPIC_ENABLE=false \
-	LISTENERS=PLAINTEXT://127.0.0.1:9092 \
+	LISTENERS=PLAINTEXT://0.0.0.0:9092 \
 	NUM_NETWORK_THREADS=3 \
 	NUM_IO_THREADS=8 \
 	SOCKET_SEND_BUFFER_BYTES=102400 \
@@ -37,7 +37,7 @@ VOLUME ["$LOG_DIRS", "$CONF_DIR"]
 EXPOSE 9092
 COPY docker-entrypoint.sh $KAFKA_HOME/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["kafka-server-start.sh", "$CONF_DIR/server.properties"]
+CMD kafka-server-start.sh $CONF_DIR/server.properties
 
 
 	
